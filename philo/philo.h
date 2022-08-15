@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/12 18:33:18 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:37:20 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-typedef struct s_philo
-{
-	int				id;
-	int				left;
-	int				right;
-	long long		t_last_eat;
-	int				n_eat;
-}				t_philo;
+# define FORK 1
+# define EAT 2
+# define SLEEP 3
+# define THINK 4
+# define DIE 5
 
 typedef struct s_info
 {
@@ -37,15 +34,36 @@ typedef struct s_info
 	int				t_sleep;
 	int				n_must_eat;
 	long long		t_start;
+	int				is_dead;
+	pthread_mutex_t	*fork;
 }				t_info;
 
-int	print_err(char *str, int err_code);
-int	ft_isdigit(int c);
-int	check_digit(char *argv[]);
-int	ft_atoi(const char *str);
-int	get_time(void);
+typedef struct s_philo
+{
+	int			id;
+	int			left;
+	int			right;
+	long long	t_last_eat;
+	int			n_eat;
+	t_info		*info;
+	pthread_t	thread;
+}				t_philo;
 
-int	set_info(t_info *info, char *argv[]);
-int	set_philo(t_info *info, t_philo **philo);
+/* philo.c */
+int		is_dead(t_philo *philo);
+void	psleep(long long t_sleep);
+int		philo_eat(t_info *info, t_philo *philo);
+void	*philo_act(void *philo);
+int		philo_start(t_info *info, t_philo *philo);
+
+/* init.c */
+int		set_info(t_info *info, char *argv[]);
+int		set_philo(t_info *info, t_philo *philo);
+
+/* utils.c */
+int		prints(long long t_act, int id, int status);
+int		get_time(void);
+int		check_digit(char *argv[]);
+int		ft_atoi(const char *str);
 
 #endif

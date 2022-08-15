@@ -6,65 +6,98 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/12 18:37:33 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:37:19 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	set_info(t_info *info, char *argv[])
+int	is_dead(t_philo *philo)
 {
-	info->n_philo = ft_atoi(argv[1]);
-	info->t_die = ft_atoi(argv[2]);
-	info->t_eat = ft_atoi(argv[3]);
-	info->t_sleep = ft_atoi(argv[4]);
-	info->n_must_eat = 0;
-	if (argv[5])
-		info->n_must_eat = ft_atoi(argv[5]);
-	if (info->n_philo < 0 || info->t_die < 0 || info->t_eat < 0
-		|| info->t_sleep < 0 || info->n_must_eat < 0)
-		return (1);
-	info->t_start = get_time();
-	return (0);
-}
-
-int	set_philo(t_info *info, t_philo **philo)
-{
-	int	i;
-
-	*philo = malloc(sizeof(t_philo) * (info->n_philo + 1));
-	if (!philo)
-		return (1);
-	i = -1;
-	while (++i < info->n_philo)
+	if (philo->info->t_die < get_time() - philo->t_last_eat
+		|| philo->info->is_dead)
 	{
-		philo[i]->id = i;
-		philo[i]->left = i;
-		philo[i]->right = i + 1;
-		if (i + 1 == info->n_philo)
-			philo[i]->right = 0;
-		philo[i]->t_last_eat = get_time();
-		philo[i]->n_eat = 0;
-		printf("%d : %lld\n", i, philo[i]->t_last_eat);
+		philo->info->is_dead = 1;
+		prints(get_time() - philo->info->t_start, philo->id + 1, DIE);
+		return (1);
 	}
 	return (0);
 }
 
-int	main(int argc, char *argv[])
+void	psleep(long long t_sleep)
 {
-	t_info	info;
-	t_philo	*philo;
-	int		err;
+	long long	t_start;
+	long long	t_now;
 
-	err = 0;
-	if (argc != 5 && argc != 6)
-		return (print_err("wrong parameters\n", err));
-	err = check_digit(argv);
-	if (err != 0)
-		return (print_err("invalid parameters\n", err));
-	err = set_info(&info, argv);
-	if (err != 0)
-		return (print_err("set_info failed\n", err));
-	err = set_philo(&info, &philo);
+	t_start = get_time();
+	while (1)
+	{
+		t_now = get_time();
+		if (t_now - t_start >= t_sleep)
+			break ;
+		usleep(100);
+	}
+}
+
+int	philo_eat(t_info *info, t_philo *philo)
+{
+	if (is_dead(philo))
+		return (1);
+	pthread_mutex_lock(&info->fork[philo->left]);
+	prints(get_time() - info->t_start, philo->id + 1, FORK);
+	pthread_mutex_lock(&info->fork[philo->right]);
+	prints(get_time() - info->t_start, philo->id + 1, FORK);
+	prints(get_time() - info->t_start, philo->id + 1, EAT);
+	philo->t_last_eat = get_time();
+	philo->n_eat += 1;
+	psleep(info->t_eat);
+	pthread_mutex_unlock(&(info->fork[philo->right]));
+	pthread_mutex_unlock(&(info->fork[philo->left]));
+	return (0);
+}
+
+void	*philo_act(void *philo)
+{
+	t_philo	*tmp_philo;
+	t_info	*tmp_info;
+
+	tmp_philo = philo;
+	tmp_info = tmp_philo->info;
+	if (tmp_philo->id % 2 == 1)
+		usleep(100);
+	while (!is_dead(tmp_philo))
+	{
+		if (tmp_philo->n_eat == tmp_philo->info->n_must_eat)
+			break ;
+		if (eat(tmp_info, tmp_philo))
+			break ;
+		prints(get_time() - tmp_info->t_start, tmp_philo->id + 1, SLEEP);
+		psleep(tmp_info->t_sleep);
+		if (is_dead(tmp_philo))
+			break ;
+		prints(get_time() - tmp_info->t_start, tmp_philo->id + 1, THINK);
+	}
+	return (0);
+}
+
+int	philo_start(t_info *info, t_philo *philo)
+{
+	int	i;
+
+	i = -1;
+	while (++i < info->n_philo)
+	{
+		philo[i].t_last_eat = get_time();
+		if (pthread_create(&philo[i].thread, 0, philo_act, &philo[i]))
+			return (1);
+	}
+	i = -1;
+	while (++i < info->n_philo)
+		pthread_join(philo[i].thread, 0);
+	i = -1;
+	while (++i < info->n_philo)
+		pthread_mutex_destroy(&(info->fork[i]));
+	free(info->fork);
+	free(philo);
 	return (0);
 }

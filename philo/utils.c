@@ -6,27 +6,41 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/12 17:57:07 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/15 14:55:29 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	print_err(char *str, int err_code)
+int	prints(long long t_act, int id, int status)
 {
-	printf("%s", str);
-	return (err_code);
+	if (status == 1)
+		printf("%lld %d has taken a fork\n", t_act, id);
+	else if (status == 2)
+		printf("%lld %d is eating\n", t_act, id);
+	else if (status == 3)
+		printf("%lld %d is sleeping\n", t_act, id);
+	else if (status == 4)
+		printf("%lld %d is thinking\n", t_act, id);
+	else if (status == 5)
+		printf("%lld %d died\n", t_act, id);
+	return (0);
 }
 
-int	ft_isdigit(int c)
+int	get_time(void)
 {
-	return (c >= '0' && c <= '9');
+	struct timeval	time;
+
+	if (gettimeofday(&time, 0) == -1)
+		return (1);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 int	check_digit(char *argv[])
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	c;
 
 	i = 0;
 	while (argv[++i])
@@ -34,11 +48,12 @@ int	check_digit(char *argv[])
 		j = -1;
 		while (argv[i][++j])
 		{
-			if (!ft_isdigit(argv[i][j]) && argv[i][j] != '+')
+			c = argv[i][j];
+			if (!(c >= '0' && c <= '9') && c != '+')
 				return (1);
-			if ((argv[i][j] == '+') && !ft_isdigit(argv[i][j + 1]))
+			if (c == '+' && !(argv[i][j + 1] >= '0' && argv[i][j + 1] <= '9'))
 				return (1);
-			if ((argv[i][j] == '+') && j != 0)
+			if (c == '+' && j != 0)
 				return (1);
 		}
 	}
@@ -60,7 +75,7 @@ int	ft_atoi(const char *str)
 			sign *= -1;
 		str++;
 	}
-	while (*str && ft_isdigit(*str))
+	while (*str && *str >= 48 && *str <= 57)
 	{
 		ret = ret * 10 + (*str - 48);
 		if (ret * sign > 2147483647)
@@ -70,13 +85,4 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return (ret * sign);
-}
-
-int	get_time(void)
-{
-	struct	timeval	time;
-
-	if (gettimeofday(&time, 0) == -1)
-		return (1);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
