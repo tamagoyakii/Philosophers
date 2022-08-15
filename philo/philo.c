@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/15 15:37:19 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:44:44 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int	philo_eat(t_info *info, t_philo *philo)
 	if (is_dead(philo))
 		return (1);
 	pthread_mutex_lock(&info->fork[philo->left]);
-	prints(get_time() - info->t_start, philo->id + 1, FORK);
+	prints(get_time() - info->t_start, philo->id, FORK);
 	pthread_mutex_lock(&info->fork[philo->right]);
-	prints(get_time() - info->t_start, philo->id + 1, FORK);
-	prints(get_time() - info->t_start, philo->id + 1, EAT);
+	prints(get_time() - info->t_start, philo->id, FORK);
+	prints(get_time() - info->t_start, philo->id, EAT);
 	philo->t_last_eat = get_time();
 	philo->n_eat += 1;
 	psleep(info->t_eat);
@@ -71,11 +71,11 @@ void	*philo_act(void *philo)
 			break ;
 		if (eat(tmp_info, tmp_philo))
 			break ;
-		prints(get_time() - tmp_info->t_start, tmp_philo->id + 1, SLEEP);
+		prints(get_time() - tmp_info->t_start, tmp_philo->id, SLEEP);
 		psleep(tmp_info->t_sleep);
 		if (is_dead(tmp_philo))
 			break ;
-		prints(get_time() - tmp_info->t_start, tmp_philo->id + 1, THINK);
+		prints(get_time() - tmp_info->t_start, tmp_philo->id, THINK);
 	}
 	return (0);
 }

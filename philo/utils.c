@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/15 14:55:29 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:44:20 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	prints(long long t_act, int id, int status)
 {
+	id += 1;
 	if (status == 1)
 		printf("%lld %d has taken a fork\n", t_act, id);
 	else if (status == 2)
