@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/15 15:44:44 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/15 15:55:05 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*philo_act(void *philo)
 	{
 		if (tmp_philo->n_eat == tmp_philo->info->n_must_eat)
 			break ;
-		if (eat(tmp_info, tmp_philo))
+		if (philo_eat(tmp_info, tmp_philo))
 			break ;
 		prints(get_time() - tmp_info->t_start, tmp_philo->id, SLEEP);
 		psleep(tmp_info->t_sleep);

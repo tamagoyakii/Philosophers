@@ -6,7 +6,7 @@
 #    By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/11 13:47:13 by jihyukim          #+#    #+#              #
-#    Updated: 2022/08/15 14:17:50 by jihyukim         ###   ########.fr        #
+#    Updated: 2022/08/15 15:47:33 by jihyukim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME =  philo
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
-SRCS = main.c philo.c init.c utils.c
+SRCS = main.c philo.c utils.c
 
 OBJS = $(SRCS:.c=.o)
 
