@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/15 15:40:15 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:47:11 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_info
 	long long		t_start;
 	int				is_dead;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	print;
 }				t_info;
 
 typedef struct s_philo
@@ -61,7 +62,7 @@ int		set_info(t_info *info, char *argv[]);
 int		set_philo(t_info *info, t_philo *philo);
 
 /* utils.c */
-int		prints(long long t_act, int id, int status);
+int		prints(t_info *info, long long t_act, int id, int status);
 int		get_time(void);
 int		check_digit(char *argv[]);
 int		ft_atoi(const char *str);

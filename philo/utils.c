@@ -6,25 +6,30 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/15 15:53:55 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/18 14:53:43 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	prints(long long t_act, int id, int status)
+int	prints(t_info *info, long long t_act, int id, int status)
 {
+	pthread_mutex_lock(&(info->print));
 	id += 1;
-	if (status == 1)
-		printf("%lld %d has taken a fork\n", t_act, id);
-	else if (status == 2)
-		printf("%lld %d is eating\n", t_act, id);
-	else if (status == 3)
-		printf("%lld %d is sleeping\n", t_act, id);
-	else if (status == 4)
-		printf("%lld %d is thinking\n", t_act, id);
-	else if (status == 5)
-		printf("%lld %d died\n", t_act, id);
+	if (!info->is_dead)
+	{
+		if (status == 1)
+			printf("%lld %d has taken a fork\n", t_act, id);
+		else if (status == 2)
+			printf("%lld %d is eating\n", t_act, id);
+		else if (status == 3)
+			printf("%lld %d is sleeping\n", t_act, id);
+		else if (status == 4)
+			printf("%lld %d is thinking\n", t_act, id);
+		else if (status == 5)
+			printf("%lld %d died\n", t_act, id);
+	}
+	pthread_mutex_unlock(&(info->print));
 	return (0);
 }
 
