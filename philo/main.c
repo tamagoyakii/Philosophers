@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/18 15:01:55 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:58:09 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	set_philo(t_info *info, t_philo *philo)
 	{
 		philo[i].id = i;
 		philo[i].left = i;
+		philo[i].right = i + 1;
 		philo[i].right = i + 1;
 		if (i + 1 == info->n_philo)
 			philo[i].right = 0;
