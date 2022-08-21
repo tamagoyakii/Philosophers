@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/18 15:01:26 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/20 18:04:42 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ int	philo_eat(t_info *info, t_philo *philo)
 		return (1);
 	pthread_mutex_lock(&info->fork[philo->left]);
 	prints(info, get_time() - info->t_start, philo->id, FORK);
+	if (philo->left == philo->right)
+	{
+		prints(info, info->t_die, philo->id, DIE);
+		return (1);
+	}
 	pthread_mutex_lock(&info->fork[philo->right]);
 	prints(info, get_time() - info->t_start, philo->id, FORK);
 	prints(info, get_time() - info->t_start, philo->id, EAT);
@@ -98,7 +103,7 @@ int	philo_start(t_info *info, t_philo *philo)
 	pthread_mutex_destroy(&(info->print));
 	i = -1;
 	while (++i < info->n_philo)
-		pthread_mutex_destroy(&(info->fork[i]));
+		pthread_mutex_destroy(&(info->fork[i] ));
 	free(info->fork);
 	free(philo);
 	return (0);
