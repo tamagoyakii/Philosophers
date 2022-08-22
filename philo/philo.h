@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 16:12:23 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/22 21:21:15 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,6 @@ int		philo_start(t_info *info, t_philo *philo);
 
 /* main.c */
 int		set_info(t_info *info, char *argv[]);
-int		set_philo(t_info *info, t_philo *philo);
+int		set_philo(t_info *info, t_philo **philo);
 
 #endif

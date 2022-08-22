@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 16:21:25 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/22 21:33:56 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,27 @@ int	set_info(t_info *info, char *argv[])
 	return (0);
 }
 
-int	set_philo(t_info *info, t_philo *philo)
+int	set_philo(t_info *info, t_philo **philo)
 {
 	int	i;
 
+	*philo = malloc(sizeof(t_philo) * (info->n_philo));
+	if (!(*philo))
+	{
+		free(info->fork);
+		return (1);
+	}
 	i = -1;
 	while (++i < info->n_philo)
 	{
-		philo[i].id = i;
-		philo[i].left = i;
-		philo[i].right = i + 1;
+		(*philo)[i].id = i;
+		(*philo)[i].left = i;
+		(*philo)[i].right = i + 1;
 		if (i + 1 == info->n_philo)
-			philo[i].right = 0;
-		philo[i].t_last_eat = get_time();
-		philo[i].n_eat = 0;
-		philo[i].info = info;
+			(*philo)[i].right = 0;
+		(*philo)[i].t_last_eat = get_time();
+		(*philo)[i].n_eat = 0;
+		(*philo)[i].info = info;
 		if (pthread_mutex_init(&info->fork[i], 0) != 0)
 			return (1);
 	}
@@ -68,16 +74,10 @@ int	main(int argc, char *argv[])
 		return (printf("wrong parameters\n"));
 	if (set_info(&info, argv))
 		return (printf("set_info failed\n"));
-	philo = malloc(sizeof(t_philo) * (info.n_philo));
-	if (!philo)
-		return (printf("philo malloc failed\n"));
 	info.fork = malloc(sizeof(pthread_mutex_t) * info.n_philo);
 	if (!info.fork)
-	{
-		free(philo);
-		return (printf("fork malloc failed\n"));
-	}
-	if (set_philo(&info, philo))
+		return (1);
+	if (set_philo(&info, &philo))
 		return (printf("set_philo failed\n"));
 	if (philo_start(&info, philo))
 		return (printf("philo_start failed\n"));
