@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/19 18:19:47 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/21 15:06:18 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@
 int	prints(t_info *info, long long t_act, int id, int status)
 {
 	int	num;
+	int	dead;
 
 	num = id + 1;
 	pthread_mutex_lock(&(info->print));
-	if (!info->is_dead)
+	pthread_mutex_lock(&(info->check_death));
+	dead = info->is_dead;
+	pthread_mutex_unlock(&(info->check_death));
+	if (!dead)
 	{
 		if (status == 1)
 			printf("%lld %d has taken a fork\n", t_act, num);
@@ -33,6 +37,21 @@ int	prints(t_info *info, long long t_act, int id, int status)
 	}
 	pthread_mutex_unlock(&(info->print));
 	return (0);
+}
+
+void	psleep(long long t_sleep)
+{
+	long long	t_start;
+	long long	t_now;
+
+	t_start = get_time();
+	while (1)
+	{
+		t_now = get_time();
+		if (t_now - t_start >= t_sleep)
+			break ;
+		usleep(100);
+	}
 }
 
 int	get_time(void)

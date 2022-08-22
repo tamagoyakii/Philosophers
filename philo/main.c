@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/20 18:05:24 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/21 14:25:19 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	set_info(t_info *info, char *argv[])
 	else
 		info->n_must_eat = -1;
 	if (pthread_mutex_init(&info->print, 0) != 0)
+		return (1);
+	if (pthread_mutex_init(&info->check_death, 0) != 0)
 		return (1);
 	return (0);
 }

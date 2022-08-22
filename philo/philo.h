@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/18 14:47:11 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/21 14:51:38 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_info
 	int				is_dead;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	print;
+	pthread_mutex_t check_death;
 }				t_info;
 
 typedef struct s_philo
@@ -50,9 +51,15 @@ typedef struct s_philo
 	pthread_t	thread;
 }				t_philo;
 
+/* utils.c */
+int		prints(t_info *info, long long t_act, int id, int status);
+void	psleep(long long t_sleep);
+int		get_time(void);
+int		check_digit(char *argv[]);
+int		ft_atoi(const char *str);
+
 /* philo.c */
 int		is_dead(t_philo *philo);
-void	psleep(long long t_sleep);
 int		philo_eat(t_info *info, t_philo *philo);
 void	*philo_act(void *philo);
 int		philo_start(t_info *info, t_philo *philo);
@@ -60,11 +67,5 @@ int		philo_start(t_info *info, t_philo *philo);
 /* main.c */
 int		set_info(t_info *info, char *argv[]);
 int		set_philo(t_info *info, t_philo *philo);
-
-/* utils.c */
-int		prints(t_info *info, long long t_act, int id, int status);
-int		get_time(void);
-int		check_digit(char *argv[]);
-int		ft_atoi(const char *str);
 
 #endif
