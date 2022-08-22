@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 15:08:07 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/22 15:25:05 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	*philo_act(void *philo)
 		dead = tmp_info->is_dead;
 		pthread_mutex_unlock(&(tmp_info->check_death));
 		if (dead)
-			break;
+			break ;
 		if (tmp_philo->n_eat == tmp_philo->info->n_must_eat)
 			break ;
 		if (philo_eat(tmp_info, tmp_philo))
