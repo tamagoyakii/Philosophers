@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 16:14:02 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/22 18:32:41 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,14 @@ int	philo_eat(t_info *info, t_philo *philo)
 		return (1);
 	}
 	pthread_mutex_lock(&info->fork[philo->right]);
-	prints(info, get_time() - info->t_start, philo->id, FORK);
-	prints(info, get_time() - info->t_start, philo->id, EAT);
-	philo->t_last_eat = get_time();
-	philo->n_eat += 1;
-	psleep(info->t_eat);
+	if (!is_dead(philo))
+	{
+		prints(info, get_time() - info->t_start, philo->id, FORK);
+		prints(info, get_time() - info->t_start, philo->id, EAT);
+		philo->t_last_eat = get_time();
+		philo->n_eat += 1;
+		psleep(info->t_eat);
+	}
 	pthread_mutex_unlock(&(info->fork[philo->right]));
 	pthread_mutex_unlock(&(info->fork[philo->left]));
 	return (0);
