@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 15:25:05 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/22 16:14:02 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	philo_start(t_info *info, t_philo *philo)
 	while (++i < info->n_philo)
 		pthread_mutex_destroy(&(info->fork[i]));
 	pthread_mutex_destroy(&(info->print));
+	pthread_mutex_destroy(&(info->check_death));
 	free(info->fork);
 	free(philo);
 	return (0);
