@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 21:21:15 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/24 14:49:33 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_philo
 }				t_philo;
 
 /* utils.c */
-int		prints(t_info *info, long long t_act, int id, int status);
+void	prints(t_info *info, long long t_act, int id, int status);
 void	psleep(long long t_sleep);
 int		get_time(void);
 int		check_digit(char *argv[]);
