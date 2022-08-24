@@ -6,7 +6,7 @@
 #    By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/11 13:47:13 by jihyukim          #+#    #+#              #
-#    Updated: 2022/08/22 15:52:27 by jihyukim         ###   ########.fr        #
+#    Updated: 2022/08/23 14:35:16 by jihyukim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME =  philo_bonus
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
-SRCS = main_bonus.c philo_bonus.c utils_bonus.c
+SRCS = main_bonus.c philo_bonus.c utils_bonus.c sem_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 

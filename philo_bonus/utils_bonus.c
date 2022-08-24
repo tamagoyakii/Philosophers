@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 15:52:12 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/23 14:21:17 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	prints(t_info *info, long long t_act, int id, int status)
 	int	dead;
 
 	num = id + 1;
-	pthread_mutex_lock(&(info->print));
-	pthread_mutex_lock(&(info->check_death));
+	sem_wait(info->print);
+	sem_wait(info->check_death);
 	dead = info->is_dead;
-	pthread_mutex_unlock(&(info->check_death));
+	sem_post(info->check_death);
 	if (!dead)
 	{
 		if (status == 1)
@@ -35,7 +35,7 @@ int	prints(t_info *info, long long t_act, int id, int status)
 		else if (status == 5)
 			printf("%lld %d died\n", t_act, num);
 	}
-	pthread_mutex_unlock(&(info->print));
+	sem_post(info->print);
 	return (0);
 }
 

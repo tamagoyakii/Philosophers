@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 21:08:26 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/23 15:06:02 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,15 @@ int		ft_atoi(const char *str);
 int		is_dead(t_philo *philo);
 int		philo_eat(t_info *info, t_philo *philo);
 void	*philo_act(void *philo);
-int		philo_start(t_info *info, t_philo *philo);
+int		philo_start(t_philo *philo);
+
+/* sem_bonus.c */
+sem_t	*get_sem(char *label, int num);
+int 	set_sem(t_info *info);
 
 /* main_bonus.c */
+void	error_exit(char *str);
+int		free_all(t_info *info, t_philo *philos);
 int		set_info(t_info *info, char *argv[]);
 int		set_philo(t_info *info, t_philo **philo);
 

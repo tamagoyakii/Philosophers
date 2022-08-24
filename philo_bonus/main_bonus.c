@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 21:56:51 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/23 15:05:47 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,23 @@ void	error_exit(char *str)
 	if (str)
 		printf("%s\n", str);
 	exit(1);
+}
+
+int	free_all(t_info *info, t_philo *philos)
+{
+	int	i;
+
+	i = -1;
+	while (++i < info->n_philo)
+		kill(philos[i].pid, SIGTERM);
+	sem_close(info->fork);
+	sem_unlink("fork");
+	sem_close(info->print);
+	sem_unlink("print");
+	sem_close(info->check_death);
+	sem_unlink("deadcheck");
+	free(philos);
+	return (0);
 }
 
 int	set_info(t_info *info, char *argv[])
@@ -38,10 +55,6 @@ int	set_info(t_info *info, char *argv[])
 	}
 	else
 		info->n_must_eat = -1;
-	if (pthread_mutex_init(&info->print, 0) != 0)
-		return (1);
-	if (pthread_mutex_init(&info->check_death, 0) != 0)
-		return (1);
 	return (0);
 }
 
@@ -60,33 +73,15 @@ int	set_philo(t_info *info, t_philo **philo)
 		(*philo)[i].n_eat = 0;
 		(*philo)[i].info = info;
 	}
-	return (0);
-}
-
-int	get_sem(char *label, int num)
-{
-	sem_t *sem;
-
-	sem = sem_open(label, O_CREAT | O_EXCL, 0644, (unsigned int)num);
-	if (sem == SEM_FAILED)
+	i = -1;
+	while (++i < info->n_philo)
 	{
-		sem_unlink(label);
-		sem = sem_open(label, O_CREAT | O_EXCL, 0644, (unsigned int)num);
+		(*philo)[i].pid = fork();
+		if ((*philo)[i].pid == 0)
+			philo_start(&((*philo)[i]));
+		else if ((*philo)[i].pid < 0)
+			error_exit("fork() failed\n");
 	}
-	return (sem);
-}
-
-int set_sem(t_info *info)
-{
-	info->fork = get_sem("fork", info->n_philo);
-	if (info->fork == SEM_FAILED)
-		return (1);
-	info->print = get_sem("print", 1);
-	if (info->print == SEM_FAILED)
-		return (1);
-	info->check_death = get_sem("check_death", 1);
-	if (info->check_death == SEM_FAILED)
-		return (1);
 	return (0);
 }
 
@@ -99,11 +94,10 @@ int	main(int argc, char *argv[])
 		error_exit("wrong parameters\n");
 	if (set_info(&info, argv))
 		error_exit("set_info failed\n");
+	if (set_sem(&info))
+		error_exit("semaphore failed\n");
 	if (set_philo(&info, &philo))
 		error_exit("set_philo failed\n");
-	if (set_sem)
-		error_exit("semaphore failed\n");
-	if (philo_start(&info, philo))
-		error_exit("philo_start failed\n");
+	free_all(&info, philo);
 	return (0);
 }
