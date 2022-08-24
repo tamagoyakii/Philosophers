@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/22 21:33:56 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/24 15:14:49 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,5 @@ int	main(int argc, char *argv[])
 		return (printf("set_philo failed\n"));
 	if (philo_start(&info, philo))
 		return (printf("philo_start failed\n"));
-	system("leaks philo");
 	return (0);
 }
