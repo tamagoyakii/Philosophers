@@ -6,36 +6,36 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/24 14:50:38 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/25 17:45:03 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	prints(t_info *info, long long t_act, int id, int status)
+void	prints(t_info *info, int id, int status)
 {
-	int	num;
-	int	dead;
+	long long	now;
+	int			num;
 
-	num = id + 1;
-	pthread_mutex_lock(&(info->print));
 	pthread_mutex_lock(&(info->check_death));
-	dead = info->is_dead;
-	pthread_mutex_unlock(&(info->check_death));
-	if (!dead)
+	if (!info->is_dead)
 	{
+		num = id + 1;
+		now = get_time() - info->t_start;
+		pthread_mutex_lock(&(info->print));
 		if (status == 1)
-			printf("%lld %d has taken a fork\n", t_act, num);
+			printf("%lld %d has taken a fork\n", now, num);
 		else if (status == 2)
-			printf("%lld %d is eating\n", t_act, num);
+			printf("%lld %d is eating\n", now, num);
 		else if (status == 3)
-			printf("%lld %d is sleeping\n", t_act, num);
+			printf("%lld %d is sleeping\n", now, num);
 		else if (status == 4)
-			printf("%lld %d is thinking\n", t_act, num);
+			printf("%lld %d is thinking\n", now, num);
 		else if (status == 5)
-			printf("%lld %d died\n", t_act, num);
+			printf("%lld %d died\n", now, num);
 	}
 	pthread_mutex_unlock(&(info->print));
+	pthread_mutex_unlock(&(info->check_death));
 }
 
 void	psleep(long long t_sleep)
@@ -53,7 +53,7 @@ void	psleep(long long t_sleep)
 	}
 }
 
-int	get_time(void)
+long long	get_time(void)
 {
 	struct timeval	time;
 

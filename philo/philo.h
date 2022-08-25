@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/24 14:49:33 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/25 15:55:48 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,14 @@ typedef struct s_info
 	int				t_eat;
 	int				t_sleep;
 	int				n_must_eat;
+	int				n_full_philo;
 	long long		t_start;
 	int				is_dead;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	print;
 	pthread_mutex_t	check_death;
+	pthread_mutex_t	check_full;
+	pthread_mutex_t	check_last_eat;
 }				t_info;
 
 typedef struct s_philo
@@ -52,20 +55,23 @@ typedef struct s_philo
 }				t_philo;
 
 /* utils.c */
-void	prints(t_info *info, long long t_act, int id, int status);
-void	psleep(long long t_sleep);
-int		get_time(void);
-int		check_digit(char *argv[]);
-int		ft_atoi(const char *str);
+void		prints(t_info *info, int id, int status);
+void		psleep(long long t_sleep);
+long long	get_time(void);
+int			check_digit(char *argv[]);
+int			ft_atoi(const char *str);
 
 /* philo.c */
-int		is_dead(t_philo *philo);
-int		philo_eat(t_info *info, t_philo *philo);
-void	*philo_act(void *philo);
-int		philo_start(t_info *info, t_philo *philo);
+void		morintoring(t_info *info, t_philo **philo);
+int			is_dead(t_info *info, t_philo *philo);
+void		philo_eat(t_info *info, t_philo *philo);
+void		*philo_act(void *philo);
+int			philo_start(t_info *info, t_philo *philo);
 
 /* main.c */
-int		set_info(t_info *info, char *argv[]);
-int		set_philo(t_info *info, t_philo **philo);
+void		free_all(t_info *info, t_philo **philo);
+int			set_mutex(t_info *info);
+int			set_info(t_info *info, char *argv[]);
+int			set_philo(t_info *info, t_philo **philo);
 
 #endif
