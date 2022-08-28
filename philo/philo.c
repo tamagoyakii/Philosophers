@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/25 17:48:11 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/28 17:08:12 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 void	morintoring(t_info *info, t_philo **philo)
 {
 	int	n_full_philo;
+	int	reason;
 	int	i;
 
+	reason = DIE;
 	i = -1;
 	while (1)
 	{
@@ -68,12 +70,6 @@ void	philo_eat(t_info *info, t_philo *philo)
 	philo->t_last_eat = get_time();
 	pthread_mutex_unlock(&info->check_last_eat);
 	philo->n_eat += 1;
-	if (philo->n_eat == info->n_must_eat)
-	{
-		pthread_mutex_lock(&(info->check_full));
-		info->n_full_philo += 1;
-		pthread_mutex_unlock(&(info->check_full));
-	}
 	psleep(info->t_eat);
 	pthread_mutex_unlock(&(info->fork[philo->right]));
 	pthread_mutex_unlock(&(info->fork[philo->left]));
@@ -90,11 +86,13 @@ void	*philo_act(void *arg)
 		usleep(100);
 	while (1)
 	{
-		if (is_dead(info, philo))
-			break ;
 		philo_eat(info, philo);
 		if (philo->n_eat == info->n_must_eat)
-			break ;
+		{
+			pthread_mutex_lock(&(info->check_full));
+			info->n_full_philo += 1;
+			pthread_mutex_unlock(&(info->check_full));
+		}
 		prints(info, philo->id, SLEEP);
 		psleep(info->t_sleep);
 		prints(info, philo->id, THINK);

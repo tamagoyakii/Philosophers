@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/25 15:54:57 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/28 17:06:09 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,8 @@ void	free_all(t_info *info, t_philo **philo)
 	int	i;
 
 	i = -1;
-	if (info->n_philo == 1)
+	while (++i < info->n_philo)
 		pthread_detach((*philo)[i].thread);
-	else
-	{
-		while (++i < info->n_philo)
-			pthread_join((*philo)[i].thread, 0);
-	}
 	i = -1;
 	while (++i < info->n_philo)
 		pthread_mutex_destroy(&(info->fork[i]));
@@ -31,8 +26,6 @@ void	free_all(t_info *info, t_philo **philo)
 	pthread_mutex_destroy(&(info->check_death));
 	pthread_mutex_destroy(&(info->check_full));
 	pthread_mutex_destroy(&(info->check_last_eat));
-	free(info->fork);
-	free(philo);
 }
 
 int	set_mutex(t_info *info)
@@ -124,5 +117,7 @@ int	main(int argc, char *argv[])
 		return (printf("philo_start failed\n"));
 	morintoring(&info, &philo);
 	free_all(&info, &philo);
+	free(info.fork);
+	free(philo);
 	return (0);
 }
