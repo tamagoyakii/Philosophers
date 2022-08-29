@@ -6,14 +6,14 @@
 #    By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/11 13:47:13 by jihyukim          #+#    #+#              #
-#    Updated: 2022/08/28 16:56:12 by jihyukim         ###   ########.fr        #
+#    Updated: 2022/08/29 16:28:04 by jihyukim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =  philo
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra # -fsanitize=thread -g 
+CFLAGS = -Wall -Werror -Wextra -fsanitize=thread -g 
 
 SRCS = main.c philo.c utils.c
 

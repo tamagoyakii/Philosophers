@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/28 17:24:22 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:32:03 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ void	free_all(t_info *info, t_philo **philo)
 {
 	int	i;
 
-	i = -1;
-	while (++i < info->n_philo)
-		pthread_detach((*philo)[i].thread);
+	if (info->n_philo == 1)
+		pthread_detach((*philo)[0].thread);
+	else
+	{
+		i = -1;
+		while (++i < info->n_philo)
+			pthread_join((*philo)[i].thread, 0);
+	}
 	i = -1;
 	while (++i < info->n_philo)
 		pthread_mutex_destroy(&(info->fork[i]));
@@ -57,8 +62,8 @@ int	set_info(t_info *info, char *argv[])
 	info->t_die = ft_atoi(argv[2]);
 	info->t_eat = ft_atoi(argv[3]);
 	info->t_sleep = ft_atoi(argv[4]);
-	if (info->n_philo < 0 || info->t_die < 0 || info->t_eat < 0
-		|| info->t_sleep < 0)
+	if (info->n_philo <= 0 || info->t_die <= 0 || info->t_eat <= 0
+		|| info->t_sleep <= 0)
 		return (1);
 	info->t_start = get_time();
 	info->n_full_philo = 0;
@@ -66,7 +71,7 @@ int	set_info(t_info *info, char *argv[])
 	if (argv[5])
 	{
 		info->n_must_eat = ft_atoi(argv[5]);
-		if (info->n_must_eat < 0)
+		if (info->n_must_eat <= 0)
 			return (1);
 	}
 	else
@@ -107,7 +112,7 @@ int	main(int argc, char *argv[])
 	if (!(argc == 5 || argc == 6) || check_digit(argv))
 		return (printf("wrong parameters\n"));
 	if (set_info(&info, argv))
-		return (printf("set_info failed\n"));
+		return (printf("invalid parameters\n"));
 	info.fork = malloc(sizeof(pthread_mutex_t) * info.n_philo);
 	if (!info.fork)
 		return (1);

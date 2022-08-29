@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/28 17:20:13 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/29 17:49:49 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ int	is_dead(t_info *info, t_philo *philo)
 	int			dead;
 
 	dead = 0;
+	pthread_mutex_lock(&(info->check_death));
+	dead = info->is_dead;
+	pthread_mutex_unlock(&(info->check_death));
+	if (dead)
+		return (dead);
 	now = get_time();
 	pthread_mutex_lock(&(info->check_last_eat));
 	if (info->t_die < now - philo->t_last_eat)
@@ -47,7 +52,7 @@ int	is_dead(t_info *info, t_philo *philo)
 		info->is_dead = 1;
 		pthread_mutex_unlock(&(info->check_death));
 		dead = 1;
-	}	
+	}
 	pthread_mutex_unlock(&(info->check_last_eat));
 	return (dead);
 }
@@ -63,9 +68,15 @@ void	philo_eat(t_info *info, t_philo *philo)
 	philo->t_last_eat = get_time();
 	pthread_mutex_unlock(&info->check_last_eat);
 	philo->n_eat += 1;
-	psleep(info->t_eat);
+	psleep(info, philo, info->t_eat);
 	pthread_mutex_unlock(&(info->fork[philo->right]));
 	pthread_mutex_unlock(&(info->fork[philo->left]));
+	if (philo->n_eat == info->n_must_eat)
+	{
+		pthread_mutex_lock(&(info->check_full));
+		info->n_full_philo += 1;
+		pthread_mutex_unlock(&(info->check_full));
+	}
 }
 
 void	*philo_act(void *arg)
@@ -79,15 +90,12 @@ void	*philo_act(void *arg)
 		usleep(100);
 	while (1)
 	{
+		if (is_dead(info, philo))
+			break ;
 		philo_eat(info, philo);
-		if (philo->n_eat == info->n_must_eat)
-		{
-			pthread_mutex_lock(&(info->check_full));
-			info->n_full_philo += 1;
-			pthread_mutex_unlock(&(info->check_full));
-		}
 		prints(info, philo->id, SLEEP);
-		psleep(info->t_sleep);
+		if (psleep(info, philo, info->t_sleep))
+			break ;
 		prints(info, philo->id, THINK);
 	}
 	return (0);

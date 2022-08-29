@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/28 17:07:36 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/29 18:00:01 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,17 @@ void	prints(t_info *info, int id, int status)
 {
 	long long	now;
 	int			num;
+	int			dead;
 
+	pthread_mutex_lock(&(info->print));
 	pthread_mutex_lock(&(info->check_death));
-	if (!info->is_dead)
+	dead = info->is_dead;
+	pthread_mutex_unlock(&(info->check_death));
+	if (!dead)
 	{
 		num = id + 1;
 		now = get_time() - info->t_start;
-		pthread_mutex_lock(&(info->print));
+		
 		if (status == 1)
 			printf("%lld %d has taken a fork\n", now, num);
 		else if (status == 2)
@@ -35,22 +39,26 @@ void	prints(t_info *info, int id, int status)
 			printf("%lld %d died\n", now, num);
 	}
 	pthread_mutex_unlock(&(info->print));
-	pthread_mutex_unlock(&(info->check_death));
 }
 
-void	psleep(long long t_sleep)
+int	psleep(t_info *info, t_philo *philo, long long t_sleep)
 {
 	long long	t_start;
 	long long	t_now;
+	int			dead;
 
 	t_start = get_time();
+	dead = 0;
 	while (1)
 	{
 		t_now = get_time();
 		if (t_now - t_start >= t_sleep)
 			break ;
+		if (is_dead(info, philo))
+			return (1);
 		usleep(100);
 	}
+	return (0);
 }
 
 long long	get_time(void)
