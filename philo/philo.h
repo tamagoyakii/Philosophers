@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/29 16:53:38 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/31 19:39:48 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_philo
 
 /* utils.c */
 void		prints(t_info *info, int id, int status);
-int			psleep(t_info *info, t_philo * philo, long long t_sleep);
+int			psleep(long long t_sleep);
 long long	get_time(void);
 int			check_digit(char *argv[]);
 int			ft_atoi(const char *str);
@@ -64,9 +64,14 @@ int			ft_atoi(const char *str);
 /* philo.c */
 void		morintoring(t_info *info, t_philo **philo);
 int			is_dead(t_info *info, t_philo *philo);
-void		philo_eat(t_info *info, t_philo *philo);
-void		*philo_act(void *philo);
+int			is_full(t_info *info);
 int			philo_start(t_info *info, t_philo *philo);
+
+/* act.c */
+int			philo_eat(t_info *info, t_philo *philo);
+int			philo_sleep(t_info *info, t_philo *philo);
+void		add_full(t_info *info,  int n_eat);
+void		*philo_act(void *philo);
 
 /* main.c */
 void		free_all(t_info *info, t_philo **philo);

@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/29 18:00:01 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/08/31 19:39:54 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,47 +15,38 @@
 void	prints(t_info *info, int id, int status)
 {
 	long long	now;
-	int			num;
-	int			dead;
 
 	pthread_mutex_lock(&(info->print));
 	pthread_mutex_lock(&(info->check_death));
-	dead = info->is_dead;
-	pthread_mutex_unlock(&(info->check_death));
-	if (!dead)
+	if (!info->is_dead)
 	{
-		num = id + 1;
 		now = get_time() - info->t_start;
-		
 		if (status == 1)
-			printf("%lld %d has taken a fork\n", now, num);
+			printf("%lld %d has taken a fork\n", now, id + 1);
 		else if (status == 2)
-			printf("%lld %d is eating\n", now, num);
+			printf("%lld %d is eating\n", now, id + 1);
 		else if (status == 3)
-			printf("%lld %d is sleeping\n", now, num);
+			printf("%lld %d is sleeping\n", now, id + 1);
 		else if (status == 4)
-			printf("%lld %d is thinking\n", now, num);
+			printf("%lld %d is thinking\n", now, id + 1);
 		else if (status == 5)
-			printf("%lld %d died\n", now, num);
+			printf("%lld %d died\n", now, id + 1);
 	}
+	pthread_mutex_unlock(&(info->check_death));
 	pthread_mutex_unlock(&(info->print));
 }
 
-int	psleep(t_info *info, t_philo *philo, long long t_sleep)
+int	psleep(long long t_sleep)
 {
 	long long	t_start;
 	long long	t_now;
-	int			dead;
 
 	t_start = get_time();
-	dead = 0;
 	while (1)
 	{
 		t_now = get_time();
 		if (t_now - t_start >= t_sleep)
 			break ;
-		if (is_dead(info, philo))
-			return (1);
 		usleep(100);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 #    By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/11 13:47:13 by jihyukim          #+#    #+#              #
-#    Updated: 2022/08/29 16:28:04 by jihyukim         ###   ########.fr        #
+#    Updated: 2022/08/31 17:02:56 by jihyukim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME =  philo
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -fsanitize=thread -g 
 
-SRCS = main.c philo.c utils.c
+SRCS = main.c philo.c act.c utils.c
 
 OBJS = $(SRCS:.c=.o)
 
