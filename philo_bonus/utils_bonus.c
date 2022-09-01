@@ -3,40 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/23 14:21:17 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 15:44:24 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	prints(t_info *info, long long t_act, int id, int status)
+void	prints(t_info *info, int id, int status)
 {
-	int	num;
-	int	dead;
+	long long	now;
+	int			dead;
 
-	num = id + 1;
-	sem_wait(info->print);
 	sem_wait(info->check_death);
 	dead = info->is_dead;
 	sem_post(info->check_death);
 	if (!dead)
 	{
+		sem_wait(info->print);
+		now = get_time() - info->t_start;
 		if (status == 1)
-			printf("%lld %d has taken a fork\n", t_act, num);
+			printf("%lld %d has taken a fork\n", now, id + 1);
 		else if (status == 2)
-			printf("%lld %d is eating\n", t_act, num);
+			printf("%lld %d is eating\n", now, id + 1);
 		else if (status == 3)
-			printf("%lld %d is sleeping\n", t_act, num);
+			printf("%lld %d is sleeping\n", now, id + 1);
 		else if (status == 4)
-			printf("%lld %d is thinking\n", t_act, num);
+			printf("%lld %d is thinking\n", now, id + 1);
 		else if (status == 5)
-			printf("%lld %d died\n", t_act, num);
+			printf("%lld %d died\n", now, id + 1);
+		sem_post(info->print);
 	}
-	sem_post(info->print);
-	return (0);
 }
 
 void	psleep(long long t_sleep)

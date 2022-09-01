@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/23 15:06:02 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 16:47:44 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_info
 	sem_t		*fork;
 	sem_t		*print;
 	sem_t		*check_death;
+	sem_t		*check_full;
 }				t_info;
 
 typedef struct s_philo
@@ -47,22 +48,28 @@ typedef struct s_philo
 	int			id;
 	long long	t_last_eat;
 	int			n_eat;
+	int			status;
 	pid_t		pid;
+	pthread_t	thread;
 	t_info		*info;
 }				t_philo;
 
 /* utils_bonus.c */
-int		prints(t_info *info, long long t_act, int id, int status);
+void	prints(t_info *info, int id, int status);
 void	psleep(long long t_sleep);
 int		get_time(void);
 int		check_digit(char *argv[]);
 int		ft_atoi(const char *str);
 
 /* philo_bonus.c */
-int		is_dead(t_philo *philo);
-int		philo_eat(t_info *info, t_philo *philo);
-void	*philo_act(void *philo);
+int		is_dead(t_info *info, t_philo *philo);
 int		philo_start(t_philo *philo);
+
+/* act_bonus.c */
+void	philo_eat(t_info *info, t_philo *philo);
+void	philo_sleep(t_info *info, t_philo *philo);
+void	philo_think(t_info *info, t_philo *philo);
+void	*philo_act(t_philo *philo);
 
 /* sem_bonus.c */
 sem_t	*get_sem(char *label, int num);

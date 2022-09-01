@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/23 15:05:47 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 16:53:05 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,13 @@ void	error_exit(char *str)
 	exit(1);
 }
 
-int	free_all(t_info *info, t_philo *philos)
+void	kill_pids(t_philo **philo, int id)
 {
 	int	i;
 
 	i = -1;
-	while (++i < info->n_philo)
-		kill(philos[i].pid, SIGTERM);
-	sem_close(info->fork);
-	sem_unlink("fork");
-	sem_close(info->print);
-	sem_unlink("print");
-	sem_close(info->check_death);
-	sem_unlink("deadcheck");
-	free(philos);
-	return (0);
+	while (++i < id)
+		kill((*philo)[i].pid, SIGINT);
 }
 
 int	set_info(t_info *info, char *argv[])
@@ -71,16 +63,16 @@ int	set_philo(t_info *info, t_philo **philo)
 		(*philo)[i].id = i;
 		(*philo)[i].t_last_eat = get_time();
 		(*philo)[i].n_eat = 0;
+		(*philo)[i].status = EAT;
 		(*philo)[i].info = info;
-	}
-	i = -1;
-	while (++i < info->n_philo)
-	{
 		(*philo)[i].pid = fork();
+		if ((*philo)[i].pid < 0)
+		{
+			kill_pids(philo, i);
+			return (1);
+		}
 		if ((*philo)[i].pid == 0)
-			philo_start(&((*philo)[i]));
-		else if ((*philo)[i].pid < 0)
-			error_exit("fork() failed\n");
+			philo_start(&(*philo)[i]);
 	}
 	return (0);
 }

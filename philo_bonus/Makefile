@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+         #
+#    By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/11 13:47:13 by jihyukim          #+#    #+#              #
-#    Updated: 2022/08/23 14:35:16 by jihyukim         ###   ########.fr        #
+#    Updated: 2022/09/01 16:44:43 by jihyukim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME =  philo_bonus
 CC = cc
 CFLAGS = -Wall -Werror -Wextra
 
-SRCS = main_bonus.c philo_bonus.c utils_bonus.c sem_bonus.c
+SRCS = main_bonus.c philo_bonus.c utils_bonus.c sem_bonus.c act_bonus.c
 
 OBJS = $(SRCS:.c=.o)
 
