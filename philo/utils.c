@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/31 19:39:54 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 13:57:34 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 void	prints(t_info *info, int id, int status)
 {
 	long long	now;
+	int			dead;
 
-	pthread_mutex_lock(&(info->print));
 	pthread_mutex_lock(&(info->check_death));
-	if (!info->is_dead)
+	dead = info->is_dead;
+	pthread_mutex_unlock(&(info->check_death));
+	if (!dead)
 	{
+		pthread_mutex_lock(&(info->print));
 		now = get_time() - info->t_start;
 		if (status == 1)
 			printf("%lld %d has taken a fork\n", now, id + 1);
@@ -31,12 +34,11 @@ void	prints(t_info *info, int id, int status)
 			printf("%lld %d is thinking\n", now, id + 1);
 		else if (status == 5)
 			printf("%lld %d died\n", now, id + 1);
+		pthread_mutex_unlock(&(info->print));
 	}
-	pthread_mutex_unlock(&(info->check_death));
-	pthread_mutex_unlock(&(info->print));
 }
 
-int	psleep(long long t_sleep)
+void	psleep(long long t_sleep)
 {
 	long long	t_start;
 	long long	t_now;
@@ -49,7 +51,6 @@ int	psleep(long long t_sleep)
 			break ;
 		usleep(100);
 	}
-	return (0);
 }
 
 long long	get_time(void)

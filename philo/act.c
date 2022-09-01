@@ -6,13 +6,13 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 16:12:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/31 19:40:09 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 13:55:56 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	philo_eat(t_info *info, t_philo *philo)
+void	philo_eat(t_info *info, t_philo *philo)
 {
 	pthread_mutex_lock(&info->fork[philo->left]);
 	prints(info, philo->id, FORK);
@@ -21,19 +21,25 @@ int	philo_eat(t_info *info, t_philo *philo)
 	prints(info, philo->id, EAT);
 	pthread_mutex_lock(&info->check_last_eat);
 	philo->t_last_eat = get_time();
-	philo->n_eat += 1;
 	pthread_mutex_unlock(&info->check_last_eat);
+	philo->n_eat += 1;
 	psleep(info->t_eat);
 	pthread_mutex_unlock(&(info->fork[philo->right]));
 	pthread_mutex_unlock(&(info->fork[philo->left]));
-	return (0);
+	philo->status = SLEEP;
 }
 
-int	philo_sleep(t_info *info, t_philo *philo)
+void	philo_sleep(t_info *info, t_philo *philo)
 {
 	prints(info, philo->id, SLEEP);
 	psleep(info->t_sleep);
-	return (0);
+	philo->status = THINK;
+}
+
+void	philo_think(t_info *info, t_philo *philo)
+{
+	prints(info, philo->id, THINK);
+	philo->status = EAT;
 }
 
 void	add_full(t_info *info, int n_eat)
@@ -57,15 +63,15 @@ void	*philo_act(void *arg)
 		usleep(100);
 	while (1)
 	{
-		if (info->n_must_eat != -1 && philo->n_eat >= info->n_must_eat)
+		if ((info->n_must_eat != -1 && philo->n_eat >= info->n_must_eat)
+			|| is_dead(info, philo))
 			break ;
-		if (is_dead(info, philo))
-			break ;
-		if (philo_eat(info, philo))
-			break ;
-		if (philo_sleep(info, philo))
-			break ;
-		prints(info, philo->id, THINK);
+		if (philo->status == EAT)
+			philo_eat(info, philo);
+		else if (philo->status == SLEEP)
+			philo_sleep(info, philo);
+		else if (philo->status == THINK)
+			philo_think(info, philo);
 	}	
 	add_full(info, philo->n_eat);
 	return (0);

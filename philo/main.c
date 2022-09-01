@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/31 19:35:37 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 13:40:21 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	set_philo(t_info *info, t_philo **philo)
 			(*philo)[i].right = 0;
 		(*philo)[i].t_last_eat = get_time();
 		(*philo)[i].n_eat = 0;
+		(*philo)[i].status = EAT;
 		(*philo)[i].info = info;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/08/31 19:39:48 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/01 13:40:28 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,14 @@ typedef struct s_philo
 	int			right;
 	long long	t_last_eat;
 	int			n_eat;
+	int			status;
 	t_info		*info;
 	pthread_t	thread;
 }				t_philo;
 
 /* utils.c */
 void		prints(t_info *info, int id, int status);
-int			psleep(long long t_sleep);
+void		psleep(long long t_sleep);
 long long	get_time(void);
 int			check_digit(char *argv[]);
 int			ft_atoi(const char *str);
@@ -68,9 +69,9 @@ int			is_full(t_info *info);
 int			philo_start(t_info *info, t_philo *philo);
 
 /* act.c */
-int			philo_eat(t_info *info, t_philo *philo);
-int			philo_sleep(t_info *info, t_philo *philo);
-void		add_full(t_info *info,  int n_eat);
+void		philo_eat(t_info *info, t_philo *philo);
+void		philo_sleep(t_info *info, t_philo *philo);
+void		add_full(t_info *info, int n_eat);
 void		*philo_act(void *philo);
 
 /* main.c */
