@@ -24,7 +24,10 @@ void	morintoring(t_info *info, t_philo **philo)
 		if (is_dead(info, &(*philo)[i]))
 			break ;
 		if (is_full(info))
+		{
+			printf("everyone is full!\n");
 			break ;
+		}
 	}
 }
 
