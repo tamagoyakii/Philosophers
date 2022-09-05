@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/04 21:15:40 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 16:16:49 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,6 @@ void	error_exit(char *str)
 	if (str)
 		printf("%s\n", str);
 	exit(1);
-}
-
-void	close_pids(t_info *info, int id)
-{
-	int	i;
-
-	i = -1;
-	while (++i < id)
-		kill(info->pid[i], SIGINT);
 }
 
 void	set_info(t_info *info, char *argv[])
@@ -69,27 +60,6 @@ void	set_philo(t_info *info, t_philo **philo)
 	}
 }
 
-void	make_process(t_info *info, t_philo **philo)
-{
-	int	i;
-
-	info->pid = malloc(sizeof(pid_t) * info->n_philo);
-	if (!(info->pid))
-		error_exit("pid malloc failed\n");
-	i = -1;
-	while (++i < info->n_philo)
-	{
-		info->pid[i] = fork();
-		if (info->pid[i] < 0)
-		{
-			close_pids(info, i);
-			error_exit("fork process failed\n");
-		}
-		if (info->pid[i] == 0)
-			philo_start(&(*philo)[i]);
-	}
-}
-
 int	main(int argc, char *argv[])
 {
 	t_info	info;
@@ -99,7 +69,8 @@ int	main(int argc, char *argv[])
 		error_exit("wrong parameters\n");
 	set_info(&info, argv);
 	set_philo(&info, &philo);
-	make_process(&info, philo);
-	free_all(&info, philo);
+	make_process(&info, &philo);
+	end_process(&info);
+	free_all(&info);
 	return (0);
 }

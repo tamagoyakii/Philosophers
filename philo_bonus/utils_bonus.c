@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 15:44:24 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 16:36:40 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,20 @@
 void	prints(t_info *info, int id, int status)
 {
 	long long	now;
-	int			dead;
 
-	sem_wait(info->check_death);
-	dead = info->is_dead;
-	sem_post(info->check_death);
-	if (!dead)
-	{
-		sem_wait(info->print);
-		now = get_time() - info->t_start;
-		if (status == 1)
-			printf("%lld %d has taken a fork\n", now, id + 1);
-		else if (status == 2)
-			printf("%lld %d is eating\n", now, id + 1);
-		else if (status == 3)
-			printf("%lld %d is sleeping\n", now, id + 1);
-		else if (status == 4)
-			printf("%lld %d is thinking\n", now, id + 1);
-		else if (status == 5)
-			printf("%lld %d died\n", now, id + 1);
-		sem_post(info->print);
-	}
+	sem_wait(info->print);
+	now = get_time() - info->t_start;
+	if (status == 1)
+		printf("%lld %d has taken a fork\n", now, id + 1);
+	else if (status == 2)
+		printf("%lld %d is eating\n", now, id + 1);
+	else if (status == 3)
+		printf("%lld %d is sleeping\n", now, id + 1);
+	else if (status == 4)
+		printf("%lld %d is thinking\n", now, id + 1);
+	else if (status == 5)
+		printf("%lld %d died\n", now, id + 1);
+	sem_post(info->print);
 }
 
 void	psleep(long long t_sleep)

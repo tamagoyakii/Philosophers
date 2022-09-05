@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sem_bonus.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 14:06:00 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 15:54:31 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 15:27:41 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,20 @@ int set_sem(t_info *info)
 	info->print = get_sem("print", 1);
 	if (info->print == SEM_FAILED)
 		return (1);
-	info->check_death = get_sem("check_death", 1);
-	if (info->check_death == SEM_FAILED)
-		return (1);
-	info->check_full = get_sem("check_full", 1);
-	if (info->check_full == SEM_FAILED)
+	info->check = get_sem("check", 1);
+	if (info->check == SEM_FAILED)
 		return (1);
 	return (0);
 }
 
-int	free_all(t_info *info, t_philo *philos)
+int	free_all(t_info *info)
 {
-	int	i;
-
-	i = -1;
-	// while (++i < info->n_philo)
-	// 	kill(philos[i].pid, SIGTERM);
 	sem_close(info->fork);
 	sem_unlink("fork");
 	sem_close(info->print);
 	sem_unlink("print");
-	sem_close(info->check_death);
-	sem_unlink("check_death");
-	sem_close(info->check_full);
-	sem_unlink("check_full");
-	free(philos);
+	sem_close(info->check);
+	sem_unlink("check");
+	free(info->pid);
 	return (0);
 }

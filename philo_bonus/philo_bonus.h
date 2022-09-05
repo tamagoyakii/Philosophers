@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/04 22:07:33 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 16:16:30 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <pthread.h>
 # include <sys/time.h>
+// # include <sys/wait.h>
 # include <string.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -27,6 +28,7 @@
 # define SLEEP 3
 # define THINK 4
 # define DIE 5
+# define FULL 6
 
 typedef struct s_info
 {
@@ -35,13 +37,13 @@ typedef struct s_info
 	int			t_eat;
 	int			t_sleep;
 	int			n_must_eat;
+	int			n_full_philo;
 	long long	t_start;
 	int			is_dead;
 	pid_t		*pid;
 	sem_t		*fork;
 	sem_t		*print;
-	sem_t		*check_death;
-	sem_t		*check_full;
+	sem_t		*check;
 }				t_info;
 
 typedef struct s_philo
@@ -50,7 +52,6 @@ typedef struct s_philo
 	long long	t_last_eat;
 	int			n_eat;
 	int			status;
-	pthread_t	thread;
 	t_info		*info;
 }				t_philo;
 
@@ -62,22 +63,23 @@ int		check_digit(char *argv[]);
 int		ft_atoi(const char *str);
 
 /* philo_bonus.c */
-int		is_dead(t_info *info, t_philo *philo);
-int		philo_start(t_philo *philo);
+void	*check_death(void *arg);
+int		philo_eat(t_info *info, t_philo *philo);
+void	philo_act(t_philo *philo);
+void	philo_start(t_philo *philo);
 
-/* act_bonus.c */
-void	philo_eat(t_info *info, t_philo *philo);
-void	philo_sleep(t_info *info, t_philo *philo);
-void	philo_think(t_info *info, t_philo *philo);
-void	*philo_act(t_philo *philo);
+/* process_bonus.c */
+void	close_pids(t_info *info, int id);
+void	make_process(t_info *info, t_philo **philo);
+void	end_process(t_info *info);
 
 /* sem_bonus.c */
 sem_t	*get_sem(char *label, int num);
 int 	set_sem(t_info *info);
+int		free_all(t_info *info);
 
 /* main_bonus.c */
 void	error_exit(char *str);
-int		free_all(t_info *info, t_philo *philos);
 void	set_info(t_info *info, char *argv[]);
 void	set_philo(t_info *info, t_philo **philo);
 
