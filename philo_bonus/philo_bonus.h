@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 20:23:34 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 21:15:07 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_info
 	int			n_must_eat;
 	int			n_full_philo;
 	long long	t_start;
-	int			is_dead;
 	pid_t		*pid;
 	sem_t		*fork;
 	sem_t		*print;
@@ -51,7 +50,6 @@ typedef struct s_philo
 	int			id;
 	long long	t_last_eat;
 	int			n_eat;
-	int			status;
 	t_info		*info;
 }				t_philo;
 
@@ -76,11 +74,11 @@ void	end_process(t_info *info);
 /* sem_bonus.c */
 sem_t	*get_sem(char *label, int num);
 int		set_sem(t_info *info);
-int		free_all(t_info *info);
 
 /* main_bonus.c */
 void	error_exit(char *str);
 void	set_info(t_info *info, char *argv[]);
 void	set_philo(t_info *info, t_philo **philo);
+int		free_all(t_info *info, t_philo **philo);
 
 #endif

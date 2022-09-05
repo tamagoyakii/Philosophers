@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/23 14:06:00 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 18:50:25 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 20:58:16 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	set_sem(t_info *info)
 	return (0);
 }
 
-int	free_all(t_info *info)
+int	free_all(t_info *info, t_philo **philo)
 {
 	sem_close(info->fork);
 	sem_unlink("fork");
@@ -48,5 +48,6 @@ int	free_all(t_info *info)
 	sem_close(info->check);
 	sem_unlink("check");
 	free(info->pid);
+	free(*philo);
 	return (0);
 }
