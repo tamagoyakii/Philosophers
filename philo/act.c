@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 16:12:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 13:55:56 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 14:22:52 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,18 @@
 
 void	philo_eat(t_info *info, t_philo *philo)
 {
-	pthread_mutex_lock(&info->fork[philo->left]);
-	prints(info, philo->id, FORK);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(&info->fork[philo->left]);
+		prints(info, philo->id, FORK);
+	}
 	pthread_mutex_lock(&info->fork[philo->right]);
+	prints(info, philo->id, FORK);
+	if (philo->id % 2 == 1)
+	{
+		pthread_mutex_lock(&info->fork[philo->left]);
+		prints(info, philo->id, FORK);
+	}
 	prints(info, philo->id, FORK);
 	prints(info, philo->id, EAT);
 	pthread_mutex_lock(&info->check_last_eat);
@@ -24,8 +33,8 @@ void	philo_eat(t_info *info, t_philo *philo)
 	pthread_mutex_unlock(&info->check_last_eat);
 	philo->n_eat += 1;
 	psleep(info->t_eat);
-	pthread_mutex_unlock(&(info->fork[philo->right]));
 	pthread_mutex_unlock(&(info->fork[philo->left]));
+	pthread_mutex_unlock(&(info->fork[philo->right]));
 	philo->status = SLEEP;
 }
 
@@ -63,7 +72,7 @@ void	*philo_act(void *arg)
 		usleep(100);
 	while (1)
 	{
-		if ((info->n_must_eat != -1 && philo->n_eat >= info->n_must_eat)
+		if ((info->n_must_eat > 0 && philo->n_eat >= info->n_must_eat)
 			|| is_dead(info, philo))
 			break ;
 		if (philo->status == EAT)
