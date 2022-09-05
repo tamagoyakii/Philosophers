@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 16:47:44 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/04 22:07:33 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_info
 	int			n_must_eat;
 	long long	t_start;
 	int			is_dead;
+	pid_t		*pid;
 	sem_t		*fork;
 	sem_t		*print;
 	sem_t		*check_death;
@@ -49,7 +50,6 @@ typedef struct s_philo
 	long long	t_last_eat;
 	int			n_eat;
 	int			status;
-	pid_t		pid;
 	pthread_t	thread;
 	t_info		*info;
 }				t_philo;
@@ -78,7 +78,7 @@ int 	set_sem(t_info *info);
 /* main_bonus.c */
 void	error_exit(char *str);
 int		free_all(t_info *info, t_philo *philos);
-int		set_info(t_info *info, char *argv[]);
-int		set_philo(t_info *info, t_philo **philo);
+void	set_info(t_info *info, char *argv[]);
+void	set_philo(t_info *info, t_philo **philo);
 
 #endif

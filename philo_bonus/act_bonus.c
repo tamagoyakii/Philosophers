@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   act_bonus.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 15:40:52 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 17:07:14 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/04 21:58:31 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	philo_eat(t_info *info, t_philo *philo)
 	psleep(info->t_eat);
 	sem_post(info->fork);
 	sem_post(info->fork);
-    philo->status = SLEEP;
+  philo->status = SLEEP;
 }
 
 void	philo_sleep(t_info *info, t_philo *philo)

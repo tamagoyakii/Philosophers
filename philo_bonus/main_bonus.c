@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 16:53:05 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/04 21:15:40 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ void	error_exit(char *str)
 	exit(1);
 }
 
-void	kill_pids(t_philo **philo, int id)
+void	close_pids(t_info *info, int id)
 {
 	int	i;
 
 	i = -1;
 	while (++i < id)
-		kill((*philo)[i].pid, SIGINT);
+		kill(info->pid[i], SIGINT);
 }
 
-int	set_info(t_info *info, char *argv[])
+void	set_info(t_info *info, char *argv[])
 {
 	info->n_philo = ft_atoi(argv[1]);
 	info->t_die = ft_atoi(argv[2]);
@@ -36,21 +36,22 @@ int	set_info(t_info *info, char *argv[])
 	info->t_sleep = ft_atoi(argv[4]);
 	if (info->n_philo < 0 || info->t_die < 0 || info->t_eat < 0
 		|| info->t_sleep < 0)
-		return (1);
+		error_exit("invalid parameters");
 	info->t_start = get_time();
 	info->is_dead = 0;
 	if (argv[5])
 	{
 		info->n_must_eat = ft_atoi(argv[5]);
 		if (info->n_must_eat < 0)
-			return (1);
+			error_exit("invalid parameters");
 	}
 	else
 		info->n_must_eat = -1;
-	return (0);
+	if (set_sem(info))
+		error_exit("semaphore failed\n");
 }
 
-int	set_philo(t_info *info, t_philo **philo)
+void	set_philo(t_info *info, t_philo **philo)
 {
 	int	i;
 
@@ -65,16 +66,28 @@ int	set_philo(t_info *info, t_philo **philo)
 		(*philo)[i].n_eat = 0;
 		(*philo)[i].status = EAT;
 		(*philo)[i].info = info;
-		(*philo)[i].pid = fork();
-		if ((*philo)[i].pid < 0)
+	}
+}
+
+void	make_process(t_info *info, t_philo **philo)
+{
+	int	i;
+
+	info->pid = malloc(sizeof(pid_t) * info->n_philo);
+	if (!(info->pid))
+		error_exit("pid malloc failed\n");
+	i = -1;
+	while (++i < info->n_philo)
+	{
+		info->pid[i] = fork();
+		if (info->pid[i] < 0)
 		{
-			kill_pids(philo, i);
-			return (1);
+			close_pids(info, i);
+			error_exit("fork process failed\n");
 		}
-		if ((*philo)[i].pid == 0)
+		if (info->pid[i] == 0)
 			philo_start(&(*philo)[i]);
 	}
-	return (0);
 }
 
 int	main(int argc, char *argv[])
@@ -84,12 +97,9 @@ int	main(int argc, char *argv[])
 
 	if (!(argc == 5 || argc == 6) || check_digit(argv))
 		error_exit("wrong parameters\n");
-	if (set_info(&info, argv))
-		error_exit("set_info failed\n");
-	if (set_sem(&info))
-		error_exit("semaphore failed\n");
-	if (set_philo(&info, &philo))
-		error_exit("set_philo failed\n");
+	set_info(&info, argv);
+	set_philo(&info, &philo);
+	make_process(&info, philo);
 	free_all(&info, philo);
 	return (0);
 }
