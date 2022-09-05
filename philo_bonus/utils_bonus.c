@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 16:36:40 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 19:20:41 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	prints(t_info *info, int id, int status)
 	else if (status == 4)
 		printf("%lld %d is thinking\n", now, id + 1);
 	else if (status == 5)
+	{
 		printf("%lld %d died\n", now, id + 1);
+		return ;
+	}
 	sem_post(info->print);
 }
 

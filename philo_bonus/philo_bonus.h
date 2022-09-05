@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 16:16:30 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 20:23:34 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	end_process(t_info *info);
 
 /* sem_bonus.c */
 sem_t	*get_sem(char *label, int num);
-int 	set_sem(t_info *info);
+int		set_sem(t_info *info);
 int		free_all(t_info *info);
 
 /* main_bonus.c */

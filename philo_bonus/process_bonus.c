@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 15:40:52 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 17:02:20 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 20:42:04 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,21 @@ void	end_process(t_info *info)
 	int	i;
 	int	wstatus;
 
-	while (info->n_full_philo != info->n_philo)
+	i = -1;
+	while (++i < info->n_philo)
 	{
 		waitpid(-1, &wstatus, 0);
-		if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == DIE)
+		if (wstatus >> 8 == DIE)
 		{
 			close_pids(info, info->n_philo);
 			break ;
 		}
-		else if (WIFEXITED(wstatus) && WEXITSTATUS(wstatus) == FULL)
+		else if (wstatus >> 8 == FULL)
+		{
 			info->n_full_philo += 1;
+			sem_post(info->check);
+		}
 	}
-	i = -1;
-	while (++i < info->n_philo)
-		kill(info->pid[i], SIGTERM);
+	if (info->n_full_philo == info->n_philo)
+		printf("everyone is full!\n");
 }

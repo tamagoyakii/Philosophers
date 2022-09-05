@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 17:02:28 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/05 20:00:39 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	*check_death(void *arg)
 		if (get_time() - philo->t_last_eat >= info->t_die)
 		{
 			prints(info, philo->id, DIE);
-			sem_wait(info->print);
 			exit(DIE);
 		}
 		sem_post(info->check);
@@ -67,14 +66,14 @@ void	philo_act(t_philo *philo)
 		psleep(info->t_sleep);
 		prints(info, philo->id, THINK);
 	}
+	sem_wait(info->check);
 	exit(FULL);
 }
 
 void	philo_start(t_philo *philo)
 {
 	pthread_t	thread;
-	
-	philo->t_last_eat = get_time();
+
 	pthread_create(&thread, 0, &check_death, philo);
 	pthread_detach(thread);
 	philo_act(philo);

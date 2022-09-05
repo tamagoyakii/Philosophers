@@ -6,14 +6,14 @@
 #    By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/11 13:47:13 by jihyukim          #+#    #+#              #
-#    Updated: 2022/09/05 16:02:28 by jihyukim         ###   ########.fr        #
+#    Updated: 2022/09/05 19:33:53 by jihyukim         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =  philo_bonus
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 
 SRCS = main_bonus.c philo_bonus.c utils_bonus.c sem_bonus.c process_bonus.c
 
