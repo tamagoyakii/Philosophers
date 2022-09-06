@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/06 13:47:08 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/06 14:01:02 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <pthread.h>	/* pthread_create()...		*/
 # include <semaphore.h>	/* sem_open()...			*/
 # include <fcntl.h> 	/* O_CREAT, O_EXEC			*/
+# include <sys/stat.h>	/* mode_t					*/
 
 # define FORK 1
 # define EAT 2
