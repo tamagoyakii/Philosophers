@@ -6,22 +6,22 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 21:15:07 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/06 13:47:08 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef  PHILO_BONUS_H
 # define PHILO_BONUS_H
 
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-// # include <sys/wait.h>
-# include <string.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <semaphore.h>
-# include <signal.h>
+# include <stdio.h>		/* printf()					*/
+# include <unistd.h>	/* fork(), usleep()			*/
+# include <stdlib.h>	/* malloc(), free(), exit() */
+# include <signal.h>	/* kill()					*/
+# include <sys/time.h>	/* gettimeofday()			*/
+# include <sys/types.h>	/* sem_t, pid_t      		*/
+# include <pthread.h>	/* pthread_create()...		*/
+# include <semaphore.h>	/* sem_open()...			*/
+# include <fcntl.h> 	/* O_CREAT, O_EXEC			*/
 
 # define FORK 1
 # define EAT 2

@@ -6,19 +6,18 @@
 /*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:31 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 14:05:04 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/06 13:47:09 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef  PHILO_H
 # define PHILO_H
 
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <string.h>
-# include <stdlib.h>
-# include <stdio.h>
+# include <stdio.h>		/* printf()				*/
+# include <stdlib.h>	/* malloc(), free()		*/
+# include <unistd.h>	/* usleep()				*/
+# include <pthread.h>	/* pthread_create()...	*/
+# include <sys/time.h>	/* gettimeofday()		*/
 
 # define FORK 1
 # define EAT 2
