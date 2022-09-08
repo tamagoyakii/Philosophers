@@ -6,7 +6,7 @@
 /*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/08 14:38:07 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:39:53 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 void	prints(t_info *info, int id, int status)
 {
 	long long	now;
-	int			dead;
 
 	pthread_mutex_lock(&(info->check_death));
-	dead = info->is_dead;
-	pthread_mutex_unlock(&(info->check_death));
-	if (!dead)
+	if (!info->is_dead)
 	{
 		pthread_mutex_lock(&(info->print));
 		now = get_time() - info->t_start;
@@ -32,10 +29,9 @@ void	prints(t_info *info, int id, int status)
 			printf("%lld %d is sleeping\n", now, id + 1);
 		else if (status == THINK)
 			printf("%lld %d is thinking\n", now, id + 1);
-		else if (status == DIE)
-			printf("%lld %d died\n", now, id + 1);
 		pthread_mutex_unlock(&(info->print));
 	}
+	pthread_mutex_unlock(&(info->check_death));
 }
 
 void	psleep(long long t_sleep)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   act.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/31 16:12:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 14:22:52 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:19:30 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,18 @@
 
 void	philo_eat(t_info *info, t_philo *philo)
 {
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(&info->fork[philo->left]);
-		prints(info, philo->id, FORK);
-	}
-	pthread_mutex_lock(&info->fork[philo->right]);
+	pthread_mutex_lock(&info->fork[philo->left]);
 	prints(info, philo->id, FORK);
-	if (philo->id % 2 == 1)
-	{
-		pthread_mutex_lock(&info->fork[philo->left]);
-		prints(info, philo->id, FORK);
-	}
+	pthread_mutex_lock(&info->fork[philo->right]);
 	prints(info, philo->id, FORK);
 	prints(info, philo->id, EAT);
 	pthread_mutex_lock(&info->check_last_eat);
 	philo->t_last_eat = get_time();
 	pthread_mutex_unlock(&info->check_last_eat);
-	philo->n_eat += 1;
 	psleep(info->t_eat);
-	pthread_mutex_unlock(&(info->fork[philo->left]));
+	philo->n_eat += 1;
 	pthread_mutex_unlock(&(info->fork[philo->right]));
+	pthread_mutex_unlock(&(info->fork[philo->left]));
 	philo->status = SLEEP;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:20:18 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 14:04:53 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:39:44 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ int	is_dead(t_info *info, t_philo *philo)
 	pthread_mutex_unlock(&(info->check_last_eat));
 	if (dead)
 	{
-		prints(info, philo->id, DIE);
 		pthread_mutex_lock(&(info->check_death));
 		info->is_dead = dead;
 		pthread_mutex_unlock(&(info->check_death));
+		printf("%lld %d died\n", get_time() - info->t_start, philo->id + 1);
 	}
 	return (dead);
 }
@@ -69,12 +69,12 @@ int	is_full(t_info *info)
 
 int	philo_start(t_info *info, t_philo *philo)
 {
-	int	i;
+	int			i;
 
 	i = -1;
 	while (++i < info->n_philo)
 	{
-		philo[i].t_last_eat = get_time();
+		philo[i].t_last_eat = info->t_start;
 		if (pthread_create(&philo[i].thread, 0, philo_act, &philo[i]))
 			return (1);
 	}
