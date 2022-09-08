@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 14:16:24 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/05 21:21:10 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/08 14:50:23 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	set_info(t_info *info, char *argv[])
 		|| info->t_sleep <= 0)
 		error_exit("invalid parameters");
 	info->t_start = get_time();
+	info->n_full_philo = 0;
 	if (argv[5])
 	{
 		info->n_must_eat = ft_atoi(argv[5]);

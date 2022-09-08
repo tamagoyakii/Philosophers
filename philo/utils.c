@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jihyukim <jihyukim@student.42.kr>          +#+  +:+       +#+        */
+/*   By: jihyukim <jihyukim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/12 15:44:11 by jihyukim          #+#    #+#             */
-/*   Updated: 2022/09/01 13:57:34 by jihyukim         ###   ########.fr       */
+/*   Updated: 2022/09/08 14:38:07 by jihyukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ void	prints(t_info *info, int id, int status)
 	{
 		pthread_mutex_lock(&(info->print));
 		now = get_time() - info->t_start;
-		if (status == 1)
+		if (status == FORK)
 			printf("%lld %d has taken a fork\n", now, id + 1);
-		else if (status == 2)
+		else if (status == EAT)
 			printf("%lld %d is eating\n", now, id + 1);
-		else if (status == 3)
+		else if (status == SLEEP)
 			printf("%lld %d is sleeping\n", now, id + 1);
-		else if (status == 4)
+		else if (status == THINK)
 			printf("%lld %d is thinking\n", now, id + 1);
-		else if (status == 5)
+		else if (status == DIE)
 			printf("%lld %d died\n", now, id + 1);
 		pthread_mutex_unlock(&(info->print));
 	}
